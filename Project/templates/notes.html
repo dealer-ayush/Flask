@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Notes</h2>
+
+{% if role=="admin" %}
+<h4>{{ 'Edit Note' if edit else 'Add Note' }}</h4>
+
+<form method="POST" action="{{ '/update_note/' + edit.id|string if edit else '/add_note' }}">
+<input name="subject" class="form-control mb-2" placeholder="Subject" value="{{ edit.subject if edit else '' }}">
+<input name="link" class="form-control mb-2" placeholder="Drive Link" value="{{ edit.link if edit else '' }}">
+<button class="btn btn-success">{{ 'Update' if edit else 'Add' }}</button>
+</form>
+<hr>
+{% endif %}
+
+<table class="table">
+<tr><th>Subject</th><th>Link</th>{% if role=="admin" %}<th>Action</th>{% endif %}</tr>
+
+{% for n in data %}
+<tr>
+<td>{{n.subject}}</td>
+<td><a href="{{n.link}}" target="_blank">Open</a></td>
+{% if role=="admin" %}
+<td>
+<a href="/edit_note/{{n.id}}" class="btn btn-primary btn-sm">Edit</a>
+<a href="/delete_note/{{n.id}}" class="btn btn-danger btn-sm">Delete</a>
+</td>
+{% endif %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

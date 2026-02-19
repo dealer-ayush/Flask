@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Announcements</h2>
+
+{% if role=="admin" %}
+<h4>{{ 'Edit Announcement' if edit else 'Add Announcement' }}</h4>
+
+<form method="POST" action="{{ '/update_announcement/' + edit.id|string if edit else '/add_announcement' }}">
+<input name="title" class="form-control mb-2" placeholder="Title"
+       value="{{ edit.title if edit else '' }}">
+<input name="message" class="form-control mb-2" placeholder="Message"
+       value="{{ edit.message if edit else '' }}">
+<button class="btn btn-success">
+    {{ 'Update' if edit else 'Add' }}
+</button>
+</form>
+<hr>
+{% endif %}
+
+<table class="table">
+<tr><th>Title</th><th>Message</th>{% if role=="admin" %}<th>Action</th>{% endif %}</tr>
+
+{% for a in data %}
+<tr>
+<td>{{a.title}}</td>
+<td>{{a.message}}</td>
+{% if role=="admin" %}
+<td>
+<a href="/edit_announcement/{{a.id}}" class="btn btn-primary btn-sm">Edit</a>
+<a href="/delete_announcement/{{a.id}}" class="btn btn-danger btn-sm">Delete</a>
+</td>
+{% endif %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
